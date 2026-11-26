@@ -142,13 +142,14 @@ export default class Tabs extends View {
           else { run("layout.select", { stack: "panel-body", child: id }); run("layout.show", { id: "panel" }); }
         }).child(svg(icon).size(14)).child(label);
     };
-    const quotaButton = (kotaNode) => {
-      const on = Boolean(kotaNode && !kotaNode.hidden);
+    const quota = find(root, "quota");
+    const quotaButton = () => {
+      const on = !quota.hidden;
       return h_flex().id("panel-quota").h(26).px(8).gap(5).flex_none().items_center().rounded(6)
         .text_size(12).bg(on ? t.selected : t.chrome).text_color(on ? t.foreground : t.muted)
         .hover(s => s.bg(t.hover)).on_mouse_down("left", stop)
-        .on_click(() => run(on ? "layout.hide" : "layout.show", { id: "kota" }))
-        .child(svg("mods/kota/quota.svg").size(14)).child("Quota");
+        .on_click(() => run(on ? "layout.hide" : "layout.show", { id: "quota" }))
+        .child(svg("mods/quota/quota.svg").size(14)).child("Quota");
     };
     return h_flex().size_full().min_w(0).px(10).pl(lightsPadding).gap(3).items_center().bg(t.chrome).border_b(1).border_color(t.border)
       .on_mouse_up("left", () => { this.pressed = null; })
@@ -159,9 +160,9 @@ export default class Tabs extends View {
       .child(button("tab-new", "+", () => openOverlay({ mod: "new-menu", kind: "popup", width: 250, height: 512 })))
       .when(enabled.includes("files"), el => el.child(panelButton("files", "Files", "mods/files/file.svg")))
       .when(enabled.includes("changes"), el => el.child(panelButton("changes", "Changes", "mods/changes/changes.svg")))
-      .when(Boolean(find(root, "kota")), el => el.child(quotaButton(find(root, "kota"))))
-      .when(w?.buttons, el => el.child(button("minimize", w.platform === "windows" ? svg("mods/tabs-kota/win-min.svg").size(16) : "−", () => run("window.minimize")))
-        .child(button("maximize", w.platform === "windows" ? svg(`mods/tabs-kota/${w.maximized ? "win-restore" : "win-max"}.svg`).size(16) : "□", () => run("window.maximize")))
-        .child(button("close-window", w.platform === "windows" ? svg("mods/tabs-kota/win-close.svg").size(16) : svg("mods/pane/close.svg").size(13), () => run("window.close"))));
+      .when(Boolean(quota), el => el.child(quotaButton()))
+      .when(w?.buttons, el => el.child(button("minimize", w.platform === "windows" ? svg("mods/tabs-quota/win-min.svg").size(16) : "−", () => run("window.minimize")))
+        .child(button("maximize", w.platform === "windows" ? svg(`mods/tabs-quota/${w.maximized ? "win-restore" : "win-max"}.svg`).size(16) : "□", () => run("window.maximize")))
+        .child(button("close-window", w.platform === "windows" ? svg("mods/tabs-quota/win-close.svg").size(16) : svg("mods/pane/close.svg").size(13), () => run("window.close"))));
   }
 }

@@ -1,47 +1,47 @@
-# Kota
+# Quota
 
-See how much quota you have left without leaving your Herdr terminal. Open Quota for account cards with provider logos, remaining percentages, usage bars and reset times. Try it with the bundled sample data, then connect your own local reader for live Antigravity, Codex, Claude or Grok quotas.
+See how much quota you have left without leaving your Herdr terminal. Open Quota for account cards with provider logos, remaining percentages, usage bars and reset times. Try it with sample data, then connect your own local reader for live Antigravity, Codex, Claude or Grok quotas.
 
-![Kota](preview.png)
+![Quota beside the terminal in Herdr](preview.png)
 
 ## What you see
 
-The window is the Herdr main layout. Root background is `canvas`. The left sidebar is 268px, chrome, not resizable by drag, min 44, max 480. Top to bottom: the workspace brand (46px), spaces and agents sharing the leftover height (each min 90), and the workspace footer (69px).
+The window uses Herdr's main layout and a `canvas` background. The left sidebar is 268px wide with a `chrome` background, a 44px minimum and a 480px maximum. It contains the workspace brand at 46px, spaces and agents sharing the remaining height with a 90px minimum each, and the workspace footer at 69px.
 
-The work column has no drag divider. Its tab bar is 42px and drags the window. Under it, an 8px padded row with an 8px gap holds three things. The terminal fills the leftover width: pane cards with a 10px radius, 8px gap, a 1px `border`, a 1px `accent` focus ring, and a 30px pane header that stays visible. A single pane is framed too. Next, the Files and Changes stack is 368px, min 280, max 900, and starts hidden. Last, the kota panel is 320px, min 240, max 520, chrome background, 10px radius, 1px `border`. A 28px status bar sits under the row. The system title bar is hidden. macOS traffic lights sit at 12, 16.
+The work column has a 42px draggable tab bar. An 8px padded row with an 8px gap holds the terminal, the Files and Changes stack, and Quota. The terminal fills the remaining width and its panes have an 8px gap, a 10px radius, a 1px `border`, a 1px `accent` focus ring and an always-visible 30px header. The Files and Changes stack starts hidden at 368px wide and can range from 280px to 900px. Quota starts at 320px and can range from 240px to 520px. It uses a `chrome` background, 10px corner radius and 1px `border`. A 28px status bar sits at the bottom. The system title bar is hidden and macOS traffic lights sit at 12, 16.
 
-The kota panel header is 44px with a small bar-chart icon, the words Kotalar and kalan, the time of the last read, and a Yenile button. Below, each provider is a dim title-case name, its logo, and a hairline. Each account card has an 8px radius, a 1px `border`, a `background` fill, and 10px horizontal and 8px vertical padding. The card title is the account name beside a 16px logo. A row shows the quota name, a colored percentage, a 6px bar, and the reset text. The active theme supplies the colors through `done` at 50% and above, `working` from 20% to under 50%, and `blocked` below 20%. Percentages above zero and below 10% show one decimal. At 99.5% or above the row says kullanılmadı unless the reader supplies `reset_metin`. A note row is dim text with no bar.
+The 44px panel header shows a bar-chart icon, Quotas, remaining, the last refresh time and a Refresh button. Below it, each provider has an icon, a muted name and a divider. Account cards have an 8px radius, a 1px `border`, a `background` fill, 10px horizontal padding and 8px vertical padding. Each card title pairs the account name with a 16px logo.
 
-Provider logos are Herdr's own icons: Antigravity, Codex and Claude in color; Grok and Gemini tinted with the text color. A row whose name starts with Gemini or Claude also shows that logo at 12px.
+Each usage window shows a label, a remaining percentage, a 6px bar and optional reset text. The theme supplies colors through `done` at 50% and above, `working` from 20% to below 50%, and `blocked` below 20%. Values above zero and below 10% show one decimal. At 99.5% or above, the reset label reads Unused unless the reader supplies `reset_text`. Notes appear in muted text without a bar.
+
+Herdr supplies the Antigravity, Codex and Claude color logos and the monochrome Grok and Gemini logos. Rows whose labels start with Gemini or Claude also show a 12px logo.
 
 ## How it behaves
 
-Yenile runs the quota script and replaces the list. The same read runs when the panel opens and every 3 minutes while the window is visible. While it runs, the time says yenileniyor… and the button says …. A failed read keeps the last list and shows the error in red. With no list yet, the error sits in a card, or the panel says okunuyor….
+Refresh runs the local quota reader and updates the panel. The reader runs on the first open and the panel checks again every three minutes while the window is visible. While it runs, the status says Refreshing… and the button shows an ellipsis. If the reader fails, the panel keeps any previously loaded data. With no data loaded, it displays the error. While the first read is in progress, it shows Loading quotas….
 
-Quota in the tab bar hides the kota block when it is open and shows it when it is closed. The button uses the selected background while the panel is open. Files and Changes keep their own show and hide. The panel does not follow agent status. Nothing in it is clicked except Yenile. Narrower than 160px, the panel draws only the icon and the letter K.
+Quota in the tab bar toggles the right-hand panel and uses the selected background while the panel is visible. Files and Changes keep their own toggles. Below 160px, Quota shows its icon and the letter Q.
 
 ## Built from
 
-`layouts/kota.json` is main 0.1.18 with two changes: the tab block's mod is `tabs-kota`, and `work-body`'s last child is the block `kota` (`mods/kota`, 320px). Shipped mods in the layout: `workspace-chrome`, `spaces`, `agents`, `pane`, `files`, `changes`, `workspace-status`.
+[layouts/quota.json](layouts/quota.json) adapts Herdr's main layout from 0.1.18. The tab block uses `tabs-quota`, and the final child of `work-body` is the `quota` block. The other blocks use the shipped `workspace-chrome`, `spaces`, `agents`, `pane`, `files`, `changes` and `workspace-status` mods.
 
-`mods/tabs-kota` is a clone of the shipped `tabs` mod at 0.1.18. After the Changes button it draws Quota when the layout has a node id `kota`. The click runs `layout.hide` or `layout.show` with `{ id: "kota" }`. Its window icons are `mods/tabs-kota/win-min.svg`, `win-max.svg`, `win-restore.svg` and `win-close.svg`.
+[mods/tabs-quota/](mods/tabs-quota) adapts the shipped tabs mod. It draws Quota after Changes when the layout contains a `quota` node. Clicking it runs `layout.hide` or `layout.show` with that node ID. The mod directory also provides its Windows window-control icons.
 
-`mods/kota/main.js` is the panel. It uses `theme`, `layout`, `window`, `home`, `appHome`, `readTextFile` and `exec`. Art is `mods/kota/quota.svg` and `icons/antigravity.svg`, `icons/codex.svg`, `icons/claude.svg`, `icons/grok.svg`, `icons/gemini.svg`.
+[mods/quota/main.js](mods/quota/main.js) renders the panel. It uses Herdr's theme, layout, window, home, app home, file reader and command runner. The bar-chart icon is [mods/quota/quota.svg](mods/quota/quota.svg). Provider icons come from Herdr's `icons/` directory.
 
-The read looks for `~/.herdr-hesaplar/kota_panel.py`. When that file is missing or empty, it runs `mods/kota/kota_panel.example.py`. The command is `python <script> --json`, then `py -3 <script> --json`, then `python3 <script> --json`. Timeout is 180 seconds. It parses the first `{` in stdout. A cache at `~/.herdr-hesaplar/kota-calisma/son.json` paints the previous list before the first read finishes. The script's JSON is `{ zaman, hesaplar: [{ arac, baslik, profil, ad, hata, satirlar }] }`. A row is `{ ad, kalan, reset }` or `{ ad, kalan, reset_metin }` or `{ not }`. `kalan` is the percent remaining, 0 to 100.
+The panel looks for `~/.herdr-quota/quota_panel.py`, then the earlier `~/.herdr-hesaplar/kota_panel.py`. If neither reader exists or both are empty, it runs [the bundled example](mods/quota/quota_panel.example.py). It tries `python <script> --json`, `py -3 <script> --json` and `python3 <script> --json` in that order. If a process starts and exits with a nonzero status, the panel treats it as a reader error. The timeout is 180 seconds. The JSON object starts at the first `{` in stdout.
+
+The expected object has `updated_at` and an `accounts` array. Each account has `provider`, `profile`, `name` and `windows`, with optional `title` and `error` strings. Provider keys are `antigravity`, `codex`, `claude` and `grok`. A window has a `name`, a `remaining` percentage from 0 to 100, and optional `reset` (ISO timestamp) or `reset_text` (display string). A note row has a `note` string.
+
+Earlier readers' field names and the `agy` provider key remain accepted. If present, the earlier cache at `~/.herdr-hesaplar/kota-calisma/son.json` can supply a first view while the reader runs. Account names, custom window labels and reader-provided reset text are displayed as supplied.
 
 ## Watch out
 
-The example script shows Ada and Erin. It does not read a real account. A person's own script replaces it at `~/.herdr-hesaplar/kota_panel.py` and must print the same JSON to stdout. Do not ship that script with real account names, home paths or tokens.
+The sample accounts Ada and Erin use fixture data. A local reader supplies live values and handles provider authentication. Keep private account configuration local.
 
-`tabs-kota` is a frozen copy of the tab bar. A later Herdr update does not flow into it. The Quota button only appears when a layout node is named `kota`.
-
-Logos are Herdr's `icons/` files. They are not in this folder. Codex is a light tile and stays readable on a dark panel. Grok and Gemini are one-color glyphs.
-
-The first `python` on PATH has to be a real interpreter. A Windows Store alias that fails to start is skipped for `py` and `python3`. A script that starts and exits non-zero is shown as the error. It is not tried again with another interpreter.
-
-The panel does not create accounts, log in, or call `agy`, `codex`, `grok` or `claude` itself.
+The bundled tab bar is a copy of Herdr 0.1.18. New features in Herdr's stock tab bar require updating the copied mod. The layout relies on Herdr's built-in provider icons.
 
 ## Done when
 
-`herdr-app check` passes for `mods/kota` and `mods/tabs-kota`. Switching to the layout shows the terminal, Files and Changes, and a Quota button beside Changes. Quota hides and shows the right-hand panel. With no personal script, the panel lists Ada under Antigravity and Codex and Erin under Claude, with logos, bars and percents. Yenile runs the script again. A script that prints no JSON shows the error in the panel and leaves the window usable.
+`herdr-app check` passes for `mods/quota` and `mods/tabs-quota`. Switching to Quota shows the terminal and the Files, Changes and Quota buttons. Quota toggles the panel. With the sample reader, the panel lists Ada under Antigravity and Codex and Erin under Claude with icons, usage bars, remaining percentages and reset times. Refresh runs the reader again. An invalid reader shows an error when no quota data has loaded.

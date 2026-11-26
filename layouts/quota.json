@@ -1,6 +1,6 @@
 {
   "id": "root",
-  "preview": "layouts/kota.png",
+  "preview": "layouts/quota.png",
   "cloned_from": {
     "name": "main",
     "version": "0.1.18"
@@ -80,7 +80,7 @@
           "id": "tabs",
           "type": "block",
           "content": {
-            "mod": "tabs-kota"
+            "mod": "tabs-quota"
           },
           "size": {
             "px": 42
@@ -154,10 +154,10 @@
               "hidden": true
             },
             {
-              "id": "kota",
+              "id": "quota",
               "type": "block",
               "content": {
-                "mod": "kota"
+                "mod": "quota"
               },
               "size": {
                 "px": 320

@@ -1,21 +1,21 @@
-# Herdr Kota
+# Herdr Quota
 
-See how much quota you have left while you work in Herdr. **Kota** adds a panel beside your terminal with account-by-account usage bars, remaining percentages, and reset times when your quota reader provides them.
+See how much quota you have left without leaving Herdr. **Quota** adds a panel beside your terminal with a card for each account, bars for each usage window, and reset times when your reader provides them.
 
-![Kota in Herdr with three sample accounts beside the terminal](preview.png)
+![Herdr with the Quota panel open beside the terminal in a demo workspace](preview.png)
 
 ## Read your quotas at a glance
 
-| In the panel | What it tells you |
+| In the panel | What it does |
 | --- | --- |
-| **Quota** | Open or hide the panel from the tab bar next to Files and Changes. |
-| **Account cards** | Tell Antigravity, Codex, Claude, and Grok accounts apart by name and provider icon. |
-| **Usage rows** | Read the percentage **remaining** for each window, such as five-hour or weekly, with its reset time. |
-| **Yenile** | Refresh now. The panel also checks every three minutes while the window is visible. |
+| **Quota** | Shows or hides the panel from the tab bar next to Files and Changes. |
+| **Account cards** | Identify Antigravity, Codex, Claude, and Grok accounts by name and provider icon. |
+| **Usage rows** | Show the percentage **remaining** for each window, such as five-hour or weekly, and its reset time. |
+| **Refresh** | Reads the latest values. The panel also checks every three minutes while the window is visible. |
 
-![Kota quota cards with provider logos, reset times, and color-coded remaining quota bars](docs/quota-panel.png)
+![Close-up of Quota with provider icons, remaining percentages, and reset times](docs/quota-panel.png)
 
-*Both images show sample accounts. The panel labels are in Turkish.*
+*Both images show sample accounts.*
 
 ## Try it with sample data
 
@@ -25,37 +25,32 @@ Give your Herdr agent this installation prompt.
 
 ```text
 Read ~/.config/herdr-app/AGENTS.md, then add this layout:
-https://github.com/Emrelushig/herdr-kota
+https://github.com/Emrelushig/herdr-quota
 ```
 
-To install it manually, follow these steps.
+To install manually, follow these steps.
 
-1. Copy [layouts/kota.json](layouts/kota.json) to `layouts/` in your Herdr app home, usually `~/.config/herdr-app`.
-2. Copy [mods/kota/](mods/kota) and [mods/tabs-kota/](mods/tabs-kota) into that home's `mods/` directory.
-3. Select **Kota** with **Ctrl+Shift+L**. Use **Quota** in the tab bar to show or hide the bundled sample accounts.
+1. Copy [layouts/quota.json](layouts/quota.json) to `layouts/` in your Herdr app home, usually `~/.config/herdr-app`.
+2. Copy [mods/quota/](mods/quota) and [mods/tabs-quota/](mods/tabs-quota) into that home's `mods/` directory.
+3. Select **Quota** with **Ctrl+Shift+L**. Use the **Quota** button in the tab bar to show or hide the panel.
 
-## Connect a real quota reader
+## Connect a live quota reader
 
-To show live quotas, supply your own Python reader at `~/.herdr-hesaplar/kota_panel.py`. Herdr runs it locally with `--json`. Your reader fetches or reads the quota data and prints a JSON object to standard output.
+The bundled Python reader supplies sample data. For live quotas, write your own reader at `~/.herdr-quota/quota_panel.py`. Herdr runs it locally with `--json`. Your reader obtains the quota data and prints a JSON object to standard output.
 
-Start from [the sample reader](mods/kota/kota_panel.example.py). Give each account a stable `profil` and use `agy`, `codex`, `claude`, or `grok` for `arac`. Set each row's `kalan` to the **percentage remaining**, from 0 to 100. Use an ISO timestamp for `reset` or a display label in `reset_metin`.
+Use [the sample reader](mods/quota/quota_panel.example.py) as a starting point. Give every account a stable `profile` unique within its provider. Existing readers from the earlier layout still work. The full format and fallback paths are in [RECIPE.md](RECIPE.md#built-from).
 
 | JSON field | Example |
 | --- | --- |
-| `zaman` | `2026-11-26T19:30:00` |
-| `hesaplar[].arac` | `codex` |
-| `hesaplar[].ad` | `work` |
-| `hesaplar[].satirlar[].ad` | `5 saatlik` |
-| `hesaplar[].satirlar[].kalan` | `80` |
-| `hesaplar[].satirlar[].reset_metin` | `2sa 5dk` |
+| `updated_at` | `2026-11-26T19:30:00` |
+| `accounts[].provider` | `codex` |
+| `accounts[].profile` | `work` |
+| `accounts[].name` | `Ada` |
+| `accounts[].windows[].name` | `5-hour` |
+| `accounts[].windows[].remaining` | `80` |
+| `accounts[].windows[].reset_text` | `2h 5m` |
 
-Your reader handles provider authentication. The full data format and layout details are in [RECIPE.md](RECIPE.md).
-
-## Türkçe
-
-Kota, Herdr’da terminalin yanında ne kadar kullanım hakkın kaldığını gösterir. **Quota** ile paneli açıp kapatabilir, **Yenile** ile değerleri tekrar okutabilirsin. Her hesapta kullanım penceresi, kalan yüzde ve kaynak sağlıyorsa sıfırlanma süresi görünür.
-
-Önce paketteki örnek hesaplarla deneyebilirsin. Gerçek kotalar için kendi Python okuyucunu `~/.herdr-hesaplar/kota_panel.py` konumuna koy. Çıktı biçimi için [örnek okuyucuya](mods/kota/kota_panel.example.py) bak.
+`remaining` is a percentage from 0 to 100. Use an ISO timestamp in `reset` for a computed countdown or give the row a ready-to-display `reset_text`. Your reader handles provider authentication.
 
 ## Credits
 
