@@ -1,6 +1,6 @@
 # Kota
 
-A Herdr window with the usual spaces, agents and terminal, plus a quota panel on the right. The tab bar shows Files, Changes and Quota. Quota shows and hides the panel. The panel lists remaining quota per account: a provider logo, the account name, each window's name, a bar, the percent left, and when it resets.
+See how much quota you have left without leaving your Herdr terminal. Open Quota for account cards with provider logos, remaining percentages, usage bars and reset times. Try it with the bundled sample data, then connect your own local reader for live Antigravity, Codex, Claude or Grok quotas.
 
 ![Kota](preview.png)
 
@@ -10,7 +10,7 @@ The window is the Herdr main layout. Root background is `canvas`. The left sideb
 
 The work column has no drag divider. Its tab bar is 42px and drags the window. Under it, an 8px padded row with an 8px gap holds three things. The terminal fills the leftover width: pane cards with a 10px radius, 8px gap, a 1px `border`, a 1px `accent` focus ring, and a 30px pane header that stays visible. A single pane is framed too. Next, the Files and Changes stack is 368px, min 280, max 900, and starts hidden. Last, the kota panel is 320px, min 240, max 520, chrome background, 10px radius, 1px `border`. A 28px status bar sits under the row. The system title bar is hidden. macOS traffic lights sit at 12, 16.
 
-The kota panel header is 44px: a small bar-chart icon, the words Kotalar and kalan, the time of the last read, and a Yenile button. Below, each provider is a dim title-case name, its logo, and a hairline. Each account is a card: 8px radius, 1px `border`, `background` fill, 10px horizontal and 8px vertical padding. The card title is the account name beside a 16px logo. A row is the quota name, a colored percent, a 6px bar, and the reset text. Green at 50 or above, amber from 20, red below. Under 10% and above 0 shows one decimal. 99.5 or above says kullanılmadı instead of a reset time. A note row is dim text with no bar.
+The kota panel header is 44px with a small bar-chart icon, the words Kotalar and kalan, the time of the last read, and a Yenile button. Below, each provider is a dim title-case name, its logo, and a hairline. Each account card has an 8px radius, a 1px `border`, a `background` fill, and 10px horizontal and 8px vertical padding. The card title is the account name beside a 16px logo. A row shows the quota name, a colored percentage, a 6px bar, and the reset text. The active theme supplies the colors through `done` at 50% and above, `working` from 20% to under 50%, and `blocked` below 20%. Percentages above zero and below 10% show one decimal. At 99.5% or above the row says kullanılmadı unless the reader supplies `reset_metin`. A note row is dim text with no bar.
 
 Provider logos are Herdr's own icons: Antigravity, Codex and Claude in color; Grok and Gemini tinted with the text color. A row whose name starts with Gemini or Claude also shows that logo at 12px.
 
