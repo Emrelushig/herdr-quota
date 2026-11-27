@@ -9,9 +9,9 @@ See how much quota you have left without leaving Herdr. **Quota** adds a panel b
 | In the panel | What it does |
 | --- | --- |
 | **Quota** | Shows or hides the panel from the tab bar next to Files and Changes. |
-| **Account cards** | Identify Antigravity, Codex, Claude, and Grok accounts by name and provider icon. |
-| **Usage rows** | Show the percentage **remaining** for each window, such as five-hour or weekly, and its reset time. |
-| **Refresh** | Reads the latest values. The panel also checks every three minutes while the window is visible. |
+| **Account cards** | See accounts ordered by remaining weekly quota. Use the pin button to keep an account at the top. |
+| **Usage rows** | Compare remaining percentages on equally sized tracks. Hover over a reset label for the full time. |
+| **Refresh** | Reads the latest values. The panel also checks every three minutes while visible and shows a warning when it falls back to the last available values. |
 
 ![Close-up of Quota with provider icons, remaining percentages, and reset times](docs/quota-panel.png)
 
@@ -46,11 +46,14 @@ Use [the sample reader](mods/quota/quota_panel.example.py) as a starting point. 
 | `accounts[].provider` | `codex` |
 | `accounts[].profile` | `work` |
 | `accounts[].name` | `Ada` |
+| `accounts[].program` | `codex-work` (optional Herdr program key) |
 | `accounts[].windows[].name` | `5-hour` |
 | `accounts[].windows[].remaining` | `80` |
 | `accounts[].windows[].reset_text` | `2h 5m` |
 
 `remaining` is a percentage from 0 to 100. Use an ISO timestamp in `reset` for a computed countdown or give the row a ready-to-display `reset_text`. Your reader handles provider authentication.
+
+To open an account from its card, set `program` to the key of its installed launcher in Herdr's `programs.json`. Give each account its own program key to highlight the matching card when its terminal is focused.
 
 ## Credits
 

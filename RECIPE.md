@@ -10,15 +10,17 @@ The window uses Herdr's main layout and a `canvas` background. The left sidebar 
 
 The work column has a 42px draggable tab bar. An 8px padded row with an 8px gap holds the terminal, the Files and Changes stack, and Quota. The terminal fills the remaining width and its panes have an 8px gap, a 10px radius, a 1px `border`, a 1px `accent` focus ring and an always-visible 30px header. The Files and Changes stack starts hidden at 368px wide and can range from 280px to 900px. Quota starts at 320px and can range from 240px to 520px. It uses a `chrome` background, 10px corner radius and 1px `border`. A 28px status bar sits at the bottom. The system title bar is hidden and macOS traffic lights sit at 12, 16.
 
-The 44px panel header shows a bar-chart icon, Quotas, remaining, the last refresh time and a Refresh button. Below it, each provider has an icon, a muted name and a divider. Account cards have an 8px radius, a 1px `border`, a `background` fill, 10px horizontal padding and 8px vertical padding. Each card title pairs the account name with a 16px logo.
+The panel header shows a bar-chart icon, Quota, the sort order, the last refresh time and a Refresh button. Each account card has a raised header with a provider icon, account name and pin button. The focused account uses the theme's accent when its launcher can be identified.
 
-Each usage window shows a label, a remaining percentage, a 6px bar and optional reset text. The theme supplies colors through `done` at 50% and above, `working` from 20% to below 50%, and `blocked` below 20%. Values above zero and below 10% show one decimal. At 99.5% or above, the reset label reads Unused unless the reader supplies `reset_text`. Notes appear in muted text without a bar.
+Each usage window shows a label, a remaining percentage and a 5px bar. Reset labels share a fixed-width column and reveal their full text on hover. The theme supplies colors through `done` at 50% and above, `working` from 20% to below 50%, and `blocked` below 20%. Values above zero and below 10% show one decimal. At 99.5% or above, the reset label reads Unused unless the reader supplies `reset_text`. Notes appear in muted text without a bar.
 
 Herdr supplies the Antigravity, Codex and Claude color logos and the monochrome Grok and Gemini logos. Rows whose labels start with Gemini or Claude also show a 12px logo.
 
 ## How it behaves
 
-Refresh runs the local quota reader and updates the panel. The reader runs on the first open and the panel checks again every three minutes while the window is visible. While it runs, the status says Refreshing… and the button shows an ellipsis. If the reader fails, the panel keeps any previously loaded data. With no data loaded, it displays the error. While the first read is in progress, it shows Loading quotas….
+Refresh runs the local quota reader and updates the panel. The reader runs on the first open and the panel checks again every three minutes while the window is visible. While it runs, the status says Refreshing…. If the reader fails, the panel keeps any previously loaded data and shows a warning with the error on hover. With no data loaded, it displays the error. While the first read is in progress, it shows Loading quotas….
+
+Pinned accounts appear first. Remaining cards sort by the highest valid weekly percentage for each account, or by the highest valid percentage across its windows if it has no weekly data. Cards with no usable quota sort last. A matching installed Herdr program lets the card open a new local tab.
 
 Quota in the tab bar toggles the right-hand panel and uses the selected background while the panel is visible. Files and Changes keep their own toggles. Below 160px, Quota shows its icon and the letter Q.
 
@@ -32,7 +34,7 @@ Quota in the tab bar toggles the right-hand panel and uses the selected backgrou
 
 The panel looks for `~/.herdr-quota/quota_panel.py`, then the earlier `~/.herdr-hesaplar/kota_panel.py`. If neither reader exists or both are empty, it runs [the bundled example](mods/quota/quota_panel.example.py). It tries `python <script> --json`, `py -3 <script> --json` and `python3 <script> --json` in that order. If a process starts and exits with a nonzero status, the panel treats it as a reader error. The timeout is 180 seconds. The JSON object starts at the first `{` in stdout.
 
-The expected object has `updated_at` and an `accounts` array. Each account has `provider`, `profile`, `name` and `windows`, with optional `title` and `error` strings. Provider keys are `antigravity`, `codex`, `claude` and `grok`. A window has a `name`, a `remaining` percentage from 0 to 100, and optional `reset` (ISO timestamp) or `reset_text` (display string). A note row has a `note` string.
+The expected object has `updated_at` and an `accounts` array. Each account has `provider`, `profile`, `name` and `windows`, with optional `title`, `error` and `program` strings. `program` is the key of an installed launcher in Herdr's `programs.json`. Provider keys are `antigravity`, `codex`, `claude` and `grok`. A window has a `name`, a `remaining` percentage from 0 to 100, and optional `reset` (ISO timestamp) or `reset_text` (display string). A note row has a `note` string.
 
 Earlier readers' field names and the `agy` provider key remain accepted. If present, the earlier cache at `~/.herdr-hesaplar/kota-calisma/son.json` can supply a first view while the reader runs. Account names, custom window labels and reader-provided reset text are displayed as supplied.
 
@@ -44,4 +46,4 @@ The bundled tab bar is a copy of Herdr 0.1.18. New features in Herdr's stock tab
 
 ## Done when
 
-`herdr-app check` passes for `mods/quota` and `mods/tabs-quota`. Switching to Quota shows the terminal and the Files, Changes and Quota buttons. Quota toggles the panel. With the sample reader, the panel lists Ada under Antigravity and Codex and Erin under Claude with icons, usage bars, remaining percentages and reset times. Refresh runs the reader again. An invalid reader shows an error when no quota data has loaded.
+`herdr-app check` passes for `mods/quota` and `mods/tabs-quota`. Switching to Quota shows the terminal and the Files, Changes and Quota buttons. Quota toggles the panel. With the sample reader, the panel lists Antigravity · Ada, Codex · Ada and Claude · Erin with icons, usage bars, remaining percentages and reset times. Pinning a card moves it to the top. Refresh runs the reader again. An invalid reader shows an error when no quota data has loaded and a warning when older values are available.
