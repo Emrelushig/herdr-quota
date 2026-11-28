@@ -1,8 +1,21 @@
 # Herdr Quota
 
-See how much quota you have left without leaving Herdr. **Quota** adds a panel beside your terminal with a card for each account, bars for each usage window, and reset times when your reader provides them.
+**See what quota you have left and when it resets, beside your terminal.** Try it with sample accounts, then connect a local reader for live values.
 
-![Herdr with the Quota panel open beside the terminal in a demo workspace](preview.png)
+[Try with sample data](#quick-install) · [Download ZIP](https://github.com/Emrelushig/herdr-quota/releases/latest) · [Herdr Gallery](https://herdr.dev/gallery/)
+
+![Nine-second preview showing the Quota panel beside a terminal, remaining percentages, and reset times for sample accounts](docs/quota-demo.gif)
+
+## Quick install
+
+You need **Herdr App** and **Python 3** on your PATH. The layout is based on Herdr App 0.1.18. Paste this into your Herdr agent:
+
+```text
+Read ~/.config/herdr-app/AGENTS.md, then add this layout:
+https://github.com/Emrelushig/herdr-quota
+```
+
+Open **Quota** in the tab bar to see the sample accounts.
 
 ## Read your quotas at a glance
 
@@ -15,20 +28,11 @@ See how much quota you have left without leaving Herdr. **Quota** adds a panel b
 
 ![Close-up of Quota with provider icons, remaining percentages, and reset times](docs/quota-panel.png)
 
-*Both images show sample accounts.*
+*The screenshot uses sample accounts.*
 
-## Try it with sample data
+## Manual install
 
-You need **Herdr App** and **Python 3** on your PATH. The layout is based on Herdr App 0.1.18.
-
-Give your Herdr agent this installation prompt.
-
-```text
-Read ~/.config/herdr-app/AGENTS.md, then add this layout:
-https://github.com/Emrelushig/herdr-quota
-```
-
-To install manually, follow these steps.
+Extract the release ZIP.
 
 1. Copy [layouts/quota.json](layouts/quota.json) to `layouts/` in your Herdr app home, usually `~/.config/herdr-app`.
 2. Copy [mods/quota/](mods/quota) and [mods/tabs-quota/](mods/tabs-quota) into that home's `mods/` directory.
@@ -58,3 +62,7 @@ To open an account from its card, set `program` to the key of its installed laun
 ## Credits
 
 The layout and tab bar adapt [Herdr App 0.1.18](https://github.com/herdrdev/herdr-app/tree/v0.1.18). Herdr supplies the provider icons. See the upstream [Apache 2.0 license](LICENSE).
+
+## Tell me how it went
+
+[Share setup feedback](https://github.com/Emrelushig/herdr-quota/issues/new?title=Quota%20setup%20feedback). Include your OS, Herdr version, and whether the sample accounts loaded. Keep account names and credentials out of screenshots and logs.
